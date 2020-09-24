@@ -10,12 +10,17 @@ public class plyr : NetworkBehaviour
     public Transform projectileMount;
     private float vertical;
     private float horizontal;
-
+    private Material playerMaterialClone;
+    public TextMesh playerHealthText;
     private CharacterController controller;
 
+    [SyncVar(hook = nameof(OnHealthChanged))]
+        public float health;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        playerHealthText = transform.Find("FloatingInfo/PlayerHealthText").GetComponent<TextMesh>();
+        playerHealthText.text = $"{100f}";
     }
     void Update()
     {
@@ -28,8 +33,16 @@ public class plyr : NetworkBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         float curSpeed = MOVE_SPEED * Input.GetAxis("Vertical");
         controller.SimpleMove(forward * curSpeed);
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            CmdFire();
+        }
     }
     
+    void OnHealthChanged(float _Old, float _New)
+        {
+            playerHealthText.text = $"{health}";
+        }
     public override void OnStartLocalPlayer()
     {
         controller.enabled = true;
