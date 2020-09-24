@@ -6,6 +6,7 @@ using Mirror;
         public Rigidbody rigidBody;
         public float force = 1000;
         public GameObject source;
+        public int damage = 5;
 
 
         public override void OnStartServer()
@@ -21,9 +22,20 @@ using Mirror;
         }
 
         // destroy for everyone on the server
+        // destroy for everyone on the server
         [Server]
         void DestroySelf()
         {
+            NetworkServer.Destroy(gameObject);
+        }
+
+        // ServerCallback because we don't want a warning if OnTriggerEnter is
+        // called on the client
+        [ServerCallback]
+        void OnTriggerEnter(Collider co)
+        {
+            
+
             NetworkServer.Destroy(gameObject);
         }
 
