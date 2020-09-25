@@ -31,13 +31,13 @@ using Mirror;
         // ServerCallback because we don't want a warning if OnTriggerEnter is
         // called on the client
         
-        
+        [ServerCallback]
         void OnTriggerEnter(Collider co)
         {
             if(co.gameObject != source)
             {
                 var playerrenderer = co.GetComponent<plyr>();
-                playerrenderer.CmdTakeDamage(25f);
+                playerrenderer.TakeDamage(25f);
                 //NetworkServer.Destroy(gameObject);
             }
         }

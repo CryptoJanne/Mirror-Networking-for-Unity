@@ -11,20 +11,27 @@ public class plyr : NetworkBehaviour
     private float vertical;
     private float horizontal;
     private Material playerMaterialClone;
+    public TextMesh playerNameText;
     public TextMesh playerHealthText;
     private CharacterController controller;
 
     [SyncVar(hook = nameof(OnHealthChanged))]
     public float health;
+    [SyncVar]
+    public string playerName;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerHealthText = transform.Find("FloatingInfo/PlayerHealthText").GetComponent<TextMesh>();
+        playerNameText = transform.Find("FloatingInfo/PlayerNameText").GetComponent<TextMesh>();
     }
     void Update()
     {
+        playerNameText.text = playerName;
+        playerNameText.transform.rotation = Camera.main.transform.rotation;
+        playerHealthText.transform.rotation = Camera.main.transform.rotation;
         if (!isLocalPlayer) { return; }
-
+        //playerHealthText.text = $"{health}";
         // Rotate around y - axis
         transform.Rotate(0, Input.GetAxis("Horizontal") * ROTATION_SPEED, 0);
 
@@ -53,7 +60,7 @@ public class plyr : NetworkBehaviour
 
     void OnDisable()
     {
-       if (isLocalPlayer && Camera.main != null)
+        if (isLocalPlayer && Camera.main != null)
         {
             Camera.main.orthographic = true;
             Camera.main.transform.SetParent(null);
@@ -61,9 +68,7 @@ public class plyr : NetworkBehaviour
             Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
         }
     }
-    
-    [Command]
-    public void CmdTakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         health -= amount;
         if(health <= 0)
@@ -76,6 +81,7 @@ public class plyr : NetworkBehaviour
     private void CmdInitPlayerStats()
     {
         health = 150f;
+        playerName = "CryptoJanne";
     }
     // this is called on the server
     [Command]
