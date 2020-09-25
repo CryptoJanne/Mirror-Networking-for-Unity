@@ -199,7 +199,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
-  showDebugMessages: 1
+  showDebugMessages: 0
   serverTickRate: 30
   offlineScene: Assets/Scenes/Picasso.unity
   onlineScene: Assets/Scenes/Picasso.unity

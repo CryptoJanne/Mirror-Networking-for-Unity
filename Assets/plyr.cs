@@ -15,12 +15,11 @@ public class plyr : NetworkBehaviour
     private CharacterController controller;
 
     [SyncVar(hook = nameof(OnHealthChanged))]
-        public float health;
+    public float health;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerHealthText = transform.Find("FloatingInfo/PlayerHealthText").GetComponent<TextMesh>();
-        playerHealthText.text = $"{100f}";
     }
     void Update()
     {
@@ -38,11 +37,10 @@ public class plyr : NetworkBehaviour
             CmdFire();
         }
     }
-    
     void OnHealthChanged(float _Old, float _New)
-        {
-            playerHealthText.text = $"{health}";
-        }
+    {
+        playerHealthText.text = $"{health}";
+    }
     public override void OnStartLocalPlayer()
     {
         controller.enabled = true;
@@ -50,18 +48,35 @@ public class plyr : NetworkBehaviour
         Camera.main.transform.SetParent(transform);
         Camera.main.transform.localPosition = new Vector3(0f, 3f, -8f);
         Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
+        CmdInitPlayerStats();
     }
 
-        void OnDisable()
+    void OnDisable()
+    {
+       if (isLocalPlayer && Camera.main != null)
         {
-            if (isLocalPlayer && Camera.main != null)
-            {
-                Camera.main.orthographic = true;
-                Camera.main.transform.SetParent(null);
-                Camera.main.transform.localPosition = new Vector3(0f, 70f, 0f);
-                Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
-            }
+            Camera.main.orthographic = true;
+            Camera.main.transform.SetParent(null);
+            Camera.main.transform.localPosition = new Vector3(0f, 70f, 0f);
+            Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
         }
+    }
+    
+    [Command]
+    public void CmdTakeDamage(float amount)
+    {
+        health -= amount;
+        if(health <= 0)
+        {
+            health = 0f;
+        }
+    }
+
+    [Command]
+    private void CmdInitPlayerStats()
+    {
+        health = 150f;
+    }
     // this is called on the server
     [Command]
     void CmdFire()

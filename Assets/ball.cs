@@ -6,7 +6,6 @@ using Mirror;
         public Rigidbody rigidBody;
         public float force = 1000;
         public GameObject source;
-        public int damage = 5;
 
 
         public override void OnStartServer()
@@ -38,8 +37,8 @@ using Mirror;
             if(co.gameObject != source)
             {
                 var playerrenderer = co.GetComponent<plyr>();
-                playerrenderer.health -= 20f;
-                NetworkServer.Destroy(gameObject);
+                playerrenderer.CmdTakeDamage(25f);
+                //NetworkServer.Destroy(gameObject);
             }
         }
 
