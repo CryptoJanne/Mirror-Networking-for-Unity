@@ -201,8 +201,8 @@ MonoBehaviour:
   autoStartServerBuild: 1
   showDebugMessages: 0
   serverTickRate: 30
-  offlineScene: Assets/Scenes/Picasso.unity
-  onlineScene: Assets/Scenes/Picasso.unity
+  offlineScene: 
+  onlineScene: 
   transport: {fileID: 415045931}
   networkAddress: localhost
   maxConnections: 4
@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 1505740483}
   - component: {fileID: 1505740482}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
